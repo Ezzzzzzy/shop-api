@@ -7,16 +7,14 @@ const db = require("./config/db.config")
 const dotenv = require('dotenv')
 const authMiddleware = require("./middleware/auth.middleware")
 const User = require("./models/user.model")
+const Product = require("./models/products.model")
 const UserController = require("./controllers/user.controller")
-
 
 dotenv.config()
 db.connect()
 const app = express()
 
 app.use(express.json())
-
-
 
 app.route('/auth/register')
   .post(UserController.register,)
