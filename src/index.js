@@ -4,10 +4,11 @@
 // import User from "./models/user.model.js"
 const express = require("express");
 const db = require("./config/db.config")
+const dotenv = require('dotenv')
 const User = require("./models/user.model")
 const UserController = require("./controllers/user.controller")
 
-
+dotenv.config()
 db.connect()
 const app = express()
 
@@ -15,6 +16,9 @@ app.use(express.json())
 
 app.route('/auth/register')
   .post(UserController.register)
+app.route('/auth/login')
+  .post(UserController.login)
+
 app.get('/', (req, res) => {
   res.json({
     "data": "Hello World!"
