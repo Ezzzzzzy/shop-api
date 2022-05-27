@@ -1,6 +1,7 @@
-import dotenv from 'dotenv'
+const dotenv = require('dotenv')
 dotenv.config()
-const config = {
+
+exports.config = {
     port: process.env.PORT,
     env: process.env.ENV,
     secret: process.env.APP_SECRET,
@@ -10,5 +11,3 @@ const config = {
         testURI: process.env.MONGOTESTURI
     },
 }
-
-export default config

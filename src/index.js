@@ -1,11 +1,20 @@
-import express from "express"
-import connect from "./config/db.config.js"
 
-connect()
+// import connect from "./config/db.config.js"
+// import { register } from "./controllers/user.controller.js"
+// import User from "./models/user.model.js"
+const express = require("express");
+const db = require("./config/db.config")
+const User = require("./models/user.model")
+const UserController = require("./controllers/user.controller")
+
+
+db.connect()
 const app = express()
 
 app.use(express.json())
 
+app.route('/auth/register')
+  .post(UserController.register)
 app.get('/', (req, res) => {
   res.json({
     "data": "Hello World!"
