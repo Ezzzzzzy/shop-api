@@ -19,3 +19,5 @@ let ItemSchema = new Schema({
         required: true
     }
 })
+
+mongoose.model('Item', ItemSchema)

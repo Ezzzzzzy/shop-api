@@ -8,8 +8,12 @@ const dotenv = require('dotenv')
 const authMiddleware = require("./middleware/auth.middleware")
 const User = require("./models/user.model")
 const Product = require("./models/products.model")
+const Order = require("./models/order.model")
+const Item = require("./models/item.model")
 const UserController = require("./controllers/user.controller")
 const ProductController = require("./controllers/product.controller")
+const OrderController = require("./controllers/order.controller")
+
 
 dotenv.config()
 db.connect()
@@ -17,6 +21,7 @@ const app = express()
 
 app.use(express.json())
 app.use('/products', authMiddleware)
+app.use("/orders", authMiddleware)
 
 app.route('/auth/login')
   .post(UserController.login)
@@ -28,6 +33,8 @@ app.route('/products')
 app.route('/products/:id')
   .put(ProductController.update)
   .delete(ProductController.delete)
+app.route('/orders')
+  .post(OrderController.addItem)
 
 app.get('/test', authMiddleware, (req, res) => {
   res.json({
