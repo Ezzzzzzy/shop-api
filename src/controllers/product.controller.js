@@ -35,3 +35,14 @@ exports.update = async (req, res) => {
         return res.status(500).json({ message: "Update product failed" })
     }
 }
+
+exports.delete = async (req, res) => {
+    try {
+        let Product = mongoose.model("Product")
+        await Product.deleteOne({ _id: req.params.id })
+        return res.json({ message: "Delete successful" })
+    } catch (err) {
+        console.log(err)
+        return res.json({ message: "Delete product failed" })
+    }
+}

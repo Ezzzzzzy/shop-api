@@ -27,6 +27,7 @@ app.route('/products')
   .post(ProductController.create)
 app.route('/products/:id')
   .put(ProductController.update)
+  .delete(ProductController.delete)
 
 app.get('/test', authMiddleware, (req, res) => {
   res.json({
