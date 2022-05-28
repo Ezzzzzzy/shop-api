@@ -23,6 +23,7 @@ app.route('/auth/login')
 app.route('/auth/register')
   .post(UserController.register,)
 app.route('/products')
+  .get(ProductController.get)
   .post(ProductController.create)
 
 app.get('/test', authMiddleware, (req, res) => {

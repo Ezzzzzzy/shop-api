@@ -12,3 +12,12 @@ exports.create = async (req, res) => {
         return res.status(500).json({ message: "Create product failed" })
     }
 }
+
+exports.get = async (req, res) => {
+    let Product = mongoose.model("Product")
+    let allProducts = await Product.find({});
+
+    return res.json({
+        data: allProducts
+    })
+}
