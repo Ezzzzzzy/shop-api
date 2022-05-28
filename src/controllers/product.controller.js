@@ -21,3 +21,17 @@ exports.get = async (req, res) => {
         data: allProducts
     })
 }
+
+exports.update = async (req, res) => {
+    try {
+        let Product = mongoose.model("Product")
+        await Product.findOneAndUpdate({ _id: req.params.id }, req.body)
+        let product = await Product.findOne({ _id: req.params.id })
+        return res.json({
+            product: product
+        })
+    } catch (eerr) {
+        console.log(err)
+        return res.status(500).json({ message: "Update product failed" })
+    }
+}

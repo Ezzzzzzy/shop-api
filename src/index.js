@@ -25,6 +25,8 @@ app.route('/auth/register')
 app.route('/products')
   .get(ProductController.get)
   .post(ProductController.create)
+app.route('/products/:id')
+  .put(ProductController.update)
 
 app.get('/test', authMiddleware, (req, res) => {
   res.json({
