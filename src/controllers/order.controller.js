@@ -75,5 +75,43 @@ exports.getOrder = async (req, res) => {
         }
     })
 
+    if (!userOrder) return res.status(500).json({ message: "No existing Order" })
+
     return res.json(userOrder)
+}
+
+exports.updateOrder = async (req, res) => {
+    let Order = mongoose.model("Order");
+    let Item = mongoose.model("Item")
+    try {
+        let userOrder = await Order.findOne({
+            owner: req.user,
+            status: "PENDING"
+        }).populate("items").populate({
+            path: "items", populate: {
+                path: "product",
+                model: "Product"
+            }
+        })
+
+        if (!userOrder) return res.status(500).json({ message: "No existing Order" })
+
+        req.body.items.forEach(async item => {
+            let itemValue = await Item.findOne({ _id: item.itemId }).populate("product")
+            if (item.quantity == 0) {
+                userOrder.items.pull({ _id: item.itemId })
+                await Item.deleteOne({ _id: item.itemId })
+                await userOrder.save()
+            } else {
+                itemValue.quantity = item.quantity
+                itemValue.amount = item.quantity * itemValue.product.price
+            }
+            await itemValue.save()
+        });
+
+        return res.json({ message: "update success" })
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({ message: "Update order failed" })
+    }
 }
