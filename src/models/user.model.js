@@ -19,6 +19,11 @@ let UserSchema = new Schema({
     hash_password: {
         type: String
     },
+    role: {
+        type: String,
+        enum: ['Merchant', 'Customer'],
+        default: "Customer"
+    },
     createdAt: {
         type: Date,
         default: Date.now
