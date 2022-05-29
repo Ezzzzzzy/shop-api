@@ -139,9 +139,9 @@ exports.checkout = async (req, res) => {
             },
             items: [],
             redirectUrl: {
-                success: "http://localhost:8080/order/success",
-                failure: "http://localhost:8080/order/failed",
-                cancel: "http://localhost:8080/order/cancel"
+                success: `http://localhost:8080/paymaya/${userOrder._id}/success`,
+                failure: `http://localhost:8080/paymaya/${userOrder._id}/failed`,
+                cancel: `http://localhost:8080/paymaya/${userOrder._id}/cancel`
             },
             requestReferenceNumber: userOrder._id
         }
@@ -178,5 +178,34 @@ exports.checkout = async (req, res) => {
     } catch (err) {
         console.log(err)
         return res.status(500).json({ message: "Checkout failed", data: err.response.data })
+    }
+}
+
+
+exports.finishOrder = async (req, res) => {
+    let Order = mongoose.model("Order")
+    try {
+        let userOrder = await Order.findOne({
+            _id: req.params.id
+        })
+
+        switch (req.params.status) {
+            case "success":
+                userOrder.status = "SUCCESS"
+                break;
+            case "failed":
+                userOrder.status = "FAILED"
+                break;
+            case "cancel":
+                userOrder.status = "CANCELLED"
+                break;
+        }
+
+        await userOrder.save()
+
+        res.json({ message: req.params.status })
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ message: "FAILED" })
     }
 }

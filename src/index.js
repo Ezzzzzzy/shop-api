@@ -13,6 +13,7 @@ const Item = require("./models/item.model")
 const UserController = require("./controllers/user.controller")
 const ProductController = require("./controllers/product.controller")
 const OrderController = require("./controllers/order.controller")
+const PaymayaController = require("./controllers/paymaya.controller")
 
 
 dotenv.config()
@@ -39,6 +40,8 @@ app.route('/orders')
   .put(OrderController.updateOrder)
 app.route('/orders/checkout')
   .post(OrderController.checkout)
+app.route('/paymaya/:id/:status')
+  .get(PaymayaController.finishOrder)
 
 app.get('/test', authMiddleware, (req, res) => {
   res.json({
