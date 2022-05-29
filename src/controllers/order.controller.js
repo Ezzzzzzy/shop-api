@@ -1,4 +1,5 @@
 let mongoose = require("mongoose")
+let axios = require("axios")
 
 exports.addItem = async (req, res) => {
     let Order = mongoose.model("Order");
@@ -113,5 +114,69 @@ exports.updateOrder = async (req, res) => {
     } catch (err) {
         console.log(err)
         return res.status(500).json({ message: "Update order failed" })
+    }
+}
+
+exports.checkout = async (req, res) => {
+    let Order = mongoose.model("Order")
+    try {
+        let userOrder = await Order.findOne({
+            owner: req.user,
+            status: "PENDING"
+        }).populate("items").populate({
+            path: "items", populate: {
+                path: "product",
+                model: "Product"
+            }
+        })
+
+        if (!userOrder) return res.status(500).json({ message: "No existing Order" })
+
+        let body = {
+            totalAmount: {
+                currency: "PHP",
+                value: 0
+            },
+            items: [],
+            redirectUrl: {
+                success: "http://localhost:8080/order/success",
+                failure: "http://localhost:8080/order/failed",
+                cancel: "http://localhost:8080/order/cancel"
+            },
+            requestReferenceNumber: userOrder._id
+        }
+
+        userOrder.items.forEach(item => {
+            console.log(item)
+            body.totalAmount.value += item.amount
+            body.items.push({
+                name: item.product.name,
+                quantity: item.quantity,
+                code: item.product.code,
+                amount: {
+                    value: item.product.price
+                },
+                totalAmount: {
+                    value: item.amount
+                }
+            })
+        })
+
+        let response = await axios({
+            url: "https://pg-sandbox.paymaya.com/checkout/v1/checkouts",
+            method: "POST",
+            data: body,
+            auth: {
+                username: "pk-Z0OSzLvIcOI2UIvDhdTGVVfRSSeiGStnceqwUE7n0Ah",
+            }
+        })
+
+        console.log(response)
+
+        res.json({ data: { ...response.data } });
+
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({ message: "Checkout failed", data: err.response.data })
     }
 }

@@ -37,6 +37,8 @@ app.route('/orders')
   .post(OrderController.addItem)
   .get(OrderController.getOrder)
   .put(OrderController.updateOrder)
+app.route('/orders/checkout')
+  .post(OrderController.checkout)
 
 app.get('/test', authMiddleware, (req, res) => {
   res.json({
