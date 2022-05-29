@@ -35,6 +35,7 @@ app.route('/products/:id')
   .delete(ProductController.delete)
 app.route('/orders')
   .post(OrderController.addItem)
+  .get(OrderController.getOrder)
 
 app.get('/test', authMiddleware, (req, res) => {
   res.json({

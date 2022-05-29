@@ -6,7 +6,8 @@ exports.addItem = async (req, res) => {
     let Item = mongoose.model("Item")
     try {
         let userOrder = await Order.findOne({
-            owner: req.user
+            owner: req.user,
+            status: "PENDING"
         }).populate("items").populate({
             path: "items", populate: {
                 path: "product",
@@ -60,6 +61,19 @@ exports.addItem = async (req, res) => {
         console.log(err)
         return res.status(500).json({ message: "Add to cart failed" })
     }
+}
 
+exports.getOrder = async (req, res) => {
+    let Order = mongoose.model("Order");
+    let userOrder = await Order.findOne({
+        owner: req.user,
+        status: "PENDING"
+    }).populate("items").populate({
+        path: "items", populate: {
+            path: "product",
+            model: "Product"
+        }
+    })
 
+    return res.json(userOrder)
 }
