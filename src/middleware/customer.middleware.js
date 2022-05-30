@@ -2,7 +2,7 @@ module.exports = async (req, res, next) => {
     try {
 
         if (req.user.role !== "Custmer")
-            return res.status(401).json({ message: "Access denied" })
+            return res.status(403).json({ message: "Access denied" })
 
         next()
     } catch (err) {
