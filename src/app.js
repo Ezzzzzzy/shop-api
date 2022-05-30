@@ -1,7 +1,3 @@
-
-// import connect from "./config/db.config.js"
-// import { register } from "./controllers/user.controller.js"
-// import User from "./models/user.model.js"
 const express = require("express");
 const db = require("./config/db.config")
 const dotenv = require('dotenv')
@@ -51,7 +47,5 @@ app.get('/test', authMiddleware, (req, res) => {
   })
 })
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
-});
+module.exports = app
+
