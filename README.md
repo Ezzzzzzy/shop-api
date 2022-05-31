@@ -33,6 +33,10 @@ MONGOURI=mongodb+srv://shopDBuser:admintestUser@cluster0.mqubs.mongodb.net/sales
 
     $ npm run dev
 
+## Testing the project
+
+    $ npm run test
+
 ## Users
 
 ### Register a Merchant/Customer or login using existing accounts
