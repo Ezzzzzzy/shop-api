@@ -14,7 +14,7 @@ describe("POST /auth/register", () => {
                 role: "Customer"
             })
             await expect(response.statusCode).toBe(200)
-        })
+        }, 10000)
 
         test("should receive a response with proper data", async () => {
             const response = await request(app).post("/auth/register").send({
@@ -32,7 +32,7 @@ describe("POST /auth/register", () => {
                     createdAt: expect.any(String),
                     hash_password: expect.any(String),
                 }))
-        })
+        }, 10000)
     })
 })
 
